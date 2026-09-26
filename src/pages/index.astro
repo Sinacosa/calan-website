@@ -1,0 +1,356 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+
+const principles = [
+  {
+    number: "01",
+    title: "Understands your day",
+    copy: "Calan brings together your schedule, tasks, messages, location, and the world around you.",
+  },
+  {
+    number: "02",
+    title: "Notices what changed",
+    copy: "It keeps an eye on the details that can affect your plans, from traffic to weather to a shifted meeting.",
+  },
+  {
+    number: "03",
+    title: "Speaks up with purpose",
+    copy: "You receive one clear, timely suggestion only when there is something genuinely useful to know.",
+  },
+];
+---
+
+<SiteLayout>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Calan",
+    applicationCategory: "ProductivityApplication",
+    operatingSystem: "iOS",
+    description: "A personal AI assistant that delivers the right notification at the right time.",
+  })} />
+
+  <header class="site-header shell">
+    <a class="wordmark" href="#top" aria-label="Calan home">Calan</a>
+    <nav aria-label="Primary navigation">
+      <a href="#how-it-works">How it works</a>
+      <a href="#control">Your control</a>
+    </nav>
+    <a class="header-cta" href="#waitlist">Join the waitlist <span aria-hidden="true">&rarr;</span></a>
+  </header>
+
+  <main id="top">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span>Your personal AI assistant</p>
+        <h1 id="hero-title">The right notification<br /><em>at the right time.</em></h1>
+        <p class="hero-intro">
+          Calan understands the context around your day and lets you know what matters,
+          before it becomes urgent.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#waitlist">Join the waitlist <span aria-hidden="true">&rarr;</span></a>
+          <p>Coming first to iPhone</p>
+        </div>
+      </div>
+
+      <div class="context-demo" aria-label="Calan filters many incoming signals, selects the relevant calendar, location, traffic, and weather context, and turns them into one useful notification">
+        <div class="demo-caption">
+          <span>Live context / 8 signals</span>
+          <span>10:50 AM</span>
+        </div>
+
+        <svg class="signal-map" viewBox="0 0 600 500" preserveAspectRatio="none" aria-hidden="true">
+          <path class="signal-path signal-path-selected" d="M102 112 C150 190 215 292 300 388" />
+          <path class="signal-path signal-path-selected" d="M505 176 C450 230 380 300 300 388" />
+          <path class="signal-path signal-path-selected" d="M113 274 C180 300 235 342 300 388" />
+          <path class="signal-path signal-path-selected" d="M505 320 C425 335 360 360 300 388" />
+          <path class="signal-path signal-path-later" d="M490 98 C452 135 430 163 413 203" />
+          <path class="signal-path signal-path-later" d="M94 196 C127 222 150 239 174 253" />
+          <path class="signal-path signal-path-later" d="M500 250 C468 270 445 284 418 296" />
+          <path class="signal-path signal-path-later" d="M92 334 C132 350 164 360 196 364" />
+        </svg>
+
+        <div class="signal signal-calendar signal-selected">
+          <span class="signal-icon" aria-hidden="true">01</span>
+          <span><small>Calendar</small>Meeting at 11:00</span>
+          <span class="signal-state">now</span>
+        </div>
+        <div class="signal signal-digest signal-noise">
+          <span class="signal-icon" aria-hidden="true">02</span>
+          <span><small>News</small>Morning digest</span>
+          <span class="signal-state">later</span>
+        </div>
+        <div class="signal signal-location signal-selected">
+          <span class="signal-icon" aria-hidden="true">03</span>
+          <span><small>Location</small>Still at home</span>
+          <span class="signal-state">now</span>
+        </div>
+        <div class="signal signal-message signal-noise">
+          <span class="signal-icon" aria-hidden="true">04</span>
+          <span><small>Messages</small>Lunch on Friday?</span>
+          <span class="signal-state">later</span>
+        </div>
+        <div class="signal signal-traffic signal-selected">
+          <span class="signal-icon" aria-hidden="true">05</span>
+          <span><small>Traffic</small>Heavy on A6</span>
+          <span class="signal-state">now</span>
+        </div>
+        <div class="signal signal-task signal-noise">
+          <span class="signal-icon" aria-hidden="true">06</span>
+          <span><small>Tasks</small>File expenses</span>
+          <span class="signal-state">later</span>
+        </div>
+        <div class="signal signal-weather signal-selected">
+          <span class="signal-icon" aria-hidden="true">07</span>
+          <span><small>Weather</small>Rain at 5:00</span>
+          <span class="signal-state">now</span>
+        </div>
+        <div class="signal signal-routine signal-noise">
+          <span class="signal-icon" aria-hidden="true">08</span>
+          <span><small>Home</small>Laundry is done</span>
+          <span class="signal-state">later</span>
+        </div>
+
+        <div class="signal-selector" aria-hidden="true">
+          <span class="selector-ring"></span>
+          <span class="selector-kicker">Calan</span>
+          <strong>Relevant now</strong>
+          <small>4 signals selected</small>
+        </div>
+
+        <article class="notification">
+          <div class="notification-topline">
+            <span class="notification-mark">C</span>
+            <span>CALAN</span>
+            <time>now</time>
+          </div>
+          <h2>Leave in 10 minutes</h2>
+          <p>
+            Traffic is heavier than usual, so avoid the highway. Bring an umbrella for the trip home.
+          </p>
+        </article>
+      </div>
+
+      <a class="scroll-cue" href="#idea">
+        <span aria-hidden="true"></span>
+        See how Calan thinks
+      </a>
+    </section>
+
+    <section class="statement shell reveal" id="idea" aria-labelledby="statement-title">
+      <p class="section-label">A different kind of assistant</p>
+      <h2 id="statement-title">
+        Your day doesn't happen<br />in one app. <em>Neither should<br />your assistant.</em>
+      </h2>
+      <div class="statement-copy">
+        <p>
+          Most tools wait for you to ask the right question. Calan connects the signals
+          around your day, understands what they mean together, and helps before you have to ask.
+        </p>
+        <p class="quiet-line">Helpful when it matters. Quiet when it doesn't.</p>
+      </div>
+    </section>
+
+    <section class="principles shell" id="how-it-works" aria-labelledby="principles-title">
+      <div class="section-heading reveal">
+        <p class="section-label">How it works</p>
+        <h2 id="principles-title">More context.<br /><em>Fewer interruptions.</em></h2>
+      </div>
+      <div class="principle-list">
+        {principles.map((principle) => (
+          <article class="principle reveal">
+            <span class="principle-number">{principle.number}</span>
+            <h3>{principle.title}</h3>
+            <p>{principle.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="day-section" aria-labelledby="day-title">
+      <div class="day-inner shell">
+        <div class="day-heading reveal">
+          <p class="section-label section-label-light">There when it counts</p>
+          <h2 id="day-title">A step ahead,<br /><em>all day.</em></h2>
+          <p>Calan turns small signals into useful moments, without turning your attention into another inbox.</p>
+        </div>
+
+        <ol class="day-timeline" aria-label="Examples of Calan helping throughout the day">
+          <li class="reveal">
+            <time>08:40</time>
+            <div>
+              <span>Before your first meeting</span>
+              <p>Your 9:00 moved online. You have time to finish breakfast.</p>
+            </div>
+          </li>
+          <li class="featured reveal">
+            <time>10:50</time>
+            <div>
+              <span>Before you need to leave</span>
+              <p>Leave in 10 minutes. Take the river route and bring an umbrella.</p>
+            </div>
+          </li>
+          <li class="reveal">
+            <time>15:25</time>
+            <div>
+              <span>When a follow-up matters</span>
+              <p>Sam replied with the figures you need for tomorrow's review.</p>
+            </div>
+          </li>
+          <li class="reveal">
+            <time>18:10</time>
+            <div>
+              <span>When plans change</span>
+              <p>Your usual train is delayed. The next bus gets you home sooner.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="control shell reveal" id="control" aria-labelledby="control-title">
+      <div class="control-visual" aria-hidden="true">
+        <span class="control-circle control-circle-outer"></span>
+        <span class="control-circle control-circle-inner"></span>
+        <span class="control-core">You</span>
+        <span class="permission permission-one">Calendar <i>On</i></span>
+        <span class="permission permission-two">Location <i>While using</i></span>
+        <span class="permission permission-three">Messages <i>Off</i></span>
+      </div>
+      <div class="control-copy">
+        <p class="section-label">You decide what Calan knows</p>
+        <h2 id="control-title">Intelligence with<br /><em>you in control.</em></h2>
+        <p>
+          Calan is designed around explicit permissions. You choose which sources to connect,
+          see what is being used, and can change your mind at any time.
+        </p>
+        <a href="/privacy/">Our approach to privacy <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </section>
+
+    <section class="waitlist" id="waitlist" aria-labelledby="waitlist-title">
+      <div class="waitlist-inner shell reveal">
+        <p class="section-label section-label-light">Coming first to iPhone</p>
+        <h2 id="waitlist-title">Make room for<br /><em>what matters.</em></h2>
+        <p class="waitlist-copy">Join the waitlist for thoughtful updates and early access to Calan.</p>
+
+        <form class="waitlist-form" data-waitlist-form novalidate>
+          <label for="email">Email address</label>
+          <div class="form-row">
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required />
+            <button type="submit">Join the waitlist <span aria-hidden="true">&rarr;</span></button>
+          </div>
+          {turnstileSiteKey && (
+            <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="dark" data-size="flexible"></div>
+          )}
+          <p class="form-note">No noise. Just meaningful updates. Unsubscribe anytime.</p>
+          <p class="form-status" data-form-status aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <a class="wordmark wordmark-light" href="#top">Calan</a>
+      <p>The right notification at the right time.</p>
+      <div class="footer-links">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <span>&copy; {new Date().getFullYear()} Calan</span>
+      </div>
+    </div>
+  </footer>
+
+  {turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+  <script>
+    const revealElements = document.querySelectorAll(".reveal");
+
+    if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("has-reveal");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14 });
+
+      revealElements.forEach((element) => observer.observe(element));
+    }
+
+    const contextDemo = document.querySelector<HTMLElement>(".context-demo");
+    const finalNotification = contextDemo?.querySelector<HTMLElement>(".notification");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let replayTimer: number | undefined;
+
+    const replayDemo = () => {
+      if (!contextDemo || reducedMotion.matches) return;
+      contextDemo.classList.add("is-resetting");
+      void contextDemo.offsetWidth;
+      contextDemo.classList.remove("is-resetting");
+    };
+
+    finalNotification?.addEventListener("animationend", (event) => {
+      if (event.animationName !== "notification-in" || reducedMotion.matches) return;
+      window.clearTimeout(replayTimer);
+      replayTimer = window.setTimeout(replayDemo, 5000);
+    });
+
+    reducedMotion.addEventListener("change", (event) => {
+      window.clearTimeout(replayTimer);
+      if (!event.matches) replayDemo();
+    });
+
+    const form = document.querySelector<HTMLFormElement>("[data-waitlist-form]");
+    const status = document.querySelector<HTMLElement>("[data-form-status]");
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!status) return;
+
+      const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+      const submitButton = form.querySelector<HTMLButtonElement>("button[type='submit']");
+
+      if (!emailInput.validity.valid) {
+        status.textContent = "Enter a valid email address.";
+        status.dataset.state = "error";
+        emailInput.focus();
+        return;
+      }
+
+      const turnstileInput = form.querySelector<HTMLInputElement>("[name='cf-turnstile-response']");
+      submitButton?.setAttribute("disabled", "");
+      status.textContent = "Joining...";
+      status.dataset.state = "loading";
+
+      try {
+        const response = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: emailInput.value,
+            turnstileToken: turnstileInput?.value ?? "",
+          }),
+        });
+        const result = await response.json() as { message?: string };
+
+        if (!response.ok) throw new Error(result.message || "Something went wrong. Please try again.");
+
+        form.reset();
+        status.textContent = result.message || "You're on the list. We'll be in touch.";
+        status.dataset.state = "success";
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+        status.dataset.state = "error";
+      } finally {
+        submitButton?.removeAttribute("disabled");
+      }
+    });
+  </script>
+</SiteLayout>

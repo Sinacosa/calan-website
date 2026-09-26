@@ -1,0 +1,22 @@
+{
+  "name": "calan-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "cf:dev": "npm run build && wrangler pages dev dist",
+    "cf:deploy": "npm run build && wrangler pages deploy dist"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/sitemap": "^3.7.4",
+    "@cloudflare/workers-types": "^5.20260925.2",
+    "astro": "^7.3.5",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.141.0"
+  }
+}

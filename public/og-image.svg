@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f2f0e9"/>
+  <path d="M80 82h1040M80 548h1040" stroke="#11110f" stroke-opacity=".16"/>
+  <text x="80" y="145" fill="#11110f" font-family="Georgia, serif" font-size="40" font-weight="600">Calan</text>
+  <text x="80" y="315" fill="#11110f" font-family="Helvetica, Arial, sans-serif" font-size="80" letter-spacing="-4">The right notification</text>
+  <text x="80" y="405" fill="#11110f" font-family="Georgia, serif" font-size="86" font-style="italic" letter-spacing="-3">at the right time.</text>
+  <text x="80" y="500" fill="#68675f" font-family="Helvetica, Arial, sans-serif" font-size="22">Your personal AI assistant. Coming first to iPhone.</text>
+  <circle cx="1087" cy="118" r="6" fill="#11110f"/>
+</svg>
