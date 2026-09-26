@@ -111,6 +111,10 @@ behavior.
 Use fine lines, circles, sparse labels, and controlled motion. Diagrams should explain a product idea,
 not act as background decoration.
 
+The user-control diagram should present connected tools as a permission constellation around the user.
+Show a useful range of sources and a mix of states such as connected, on, ask first, while using, and
+off. This communicates breadth without implying that Calan receives unrestricted access.
+
 ### Forms
 
 Forms should ask for the minimum information required. The initial waitlist asks for email only. Keep

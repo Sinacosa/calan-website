@@ -1,6 +1,13 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "calan-website",
-  "compatibility_date": "2026-09-26",
-  "pages_build_output_dir": "./dist"
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "calan-website",
+	"compatibility_date": "2026-09-26",
+	"pages_build_output_dir": "./dist",
+	"d1_databases": [
+		{
+			"binding": "WAITLIST_DB",
+			"database_name": "calan-waitlist",
+			"database_id": "8a997c2b-3a5a-45b3-ba62-fd94ee09838c"
+		}
+	]
 }

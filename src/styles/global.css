@@ -227,15 +227,15 @@ a {
 
 .context-demo {
   position: relative;
-  min-height: 630px;
+  min-height: 670px;
   overflow: hidden;
   border-right: 1px solid var(--line);
   border-left: 1px solid var(--line);
   background:
+    linear-gradient(to bottom, var(--paper) 0%, transparent 14%, transparent 86%, var(--paper) 100%),
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 100% 25%, 25% 100%;
-  mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  background-size: 100% 100%, 100% 25%, 25% 100%;
 }
 
 .demo-caption {
@@ -250,6 +250,21 @@ a {
   font-weight: 500;
   letter-spacing: 0.13em;
   text-transform: uppercase;
+}
+
+.demo-status {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.demo-status i,
+.selector-kicker i {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ink);
 }
 
 .signal {
@@ -301,6 +316,7 @@ a {
 
 .signal-selected {
   border-color: rgba(17, 17, 15, 0.28);
+  box-shadow: 0 12px 32px rgba(17, 17, 15, 0.06);
 }
 
 .signal-selected .signal-icon {
@@ -405,6 +421,14 @@ a {
   animation: path-recede 500ms 1.8s forwards;
 }
 
+.signal-output {
+  stroke: rgba(17, 17, 15, 0.52);
+  stroke-width: 1.2;
+  stroke-dasharray: 90;
+  stroke-dashoffset: 90;
+  animation: draw-path 500ms 2.05s forwards;
+}
+
 .signal-selector {
   position: absolute;
   z-index: 2;
@@ -431,11 +455,19 @@ a {
 }
 
 .selector-kicker {
+  display: flex;
+  gap: 5px;
+  align-items: center;
   margin-bottom: 2px;
   color: var(--muted);
   font-size: 7px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+.selector-kicker i {
+  width: 3px;
+  height: 3px;
 }
 
 .signal-selector strong {
@@ -448,6 +480,11 @@ a {
   margin-top: 1px;
   color: var(--muted);
   font-size: 7px;
+}
+
+.signal-selector small b {
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .notification {
@@ -506,6 +543,19 @@ a {
   color: rgba(255, 255, 255, 0.72);
   font-size: 13px;
   line-height: 1.42;
+}
+
+.notification-context {
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .context-demo.is-resetting .signal,
@@ -762,6 +812,7 @@ a {
 
 .control-circle {
   position: absolute;
+  z-index: 0;
   border: 1px solid var(--line);
   border-radius: 50%;
 }
@@ -770,13 +821,33 @@ a {
   inset: 6%;
 }
 
+.control-circle-middle {
+  inset: 18%;
+}
+
 .control-circle-inner {
-  inset: 29%;
+  inset: 32%;
   background: var(--paper-deep);
+}
+
+.control-links {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.control-links line {
+  stroke: rgba(17, 17, 15, 0.13);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+  vector-effect: non-scaling-stroke;
 }
 
 .control-core {
   position: absolute;
+  z-index: 2;
   top: 50%;
   left: 50%;
   display: grid;
@@ -794,34 +865,77 @@ a {
 
 .permission {
   position: absolute;
+  z-index: 3;
   display: flex;
-  gap: 15px;
+  gap: 9px;
   align-items: center;
-  padding: 10px 13px;
+  padding: 9px 11px;
   border: 1px solid var(--line);
   background: var(--paper);
-  font-size: 10px;
+  font-size: 9px;
+  white-space: nowrap;
   box-shadow: 0 12px 40px rgba(17, 17, 15, 0.05);
+}
+
+.permission b {
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  font-size: 6px;
+  font-weight: 500;
 }
 
 .permission i {
   color: var(--muted);
+  border-left: 1px solid var(--line);
   font-style: normal;
+  padding-left: 9px;
 }
 
-.permission-one {
-  top: 8%;
-  left: 42%;
+.permission-calendar {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.permission-two {
-  top: 62%;
+.permission-email {
+  top: 16%;
   right: 0;
 }
 
-.permission-three {
-  bottom: 7%;
-  left: 9%;
+.permission-whatsapp {
+  top: 16%;
+  left: 0;
+}
+
+.permission-weather {
+  top: 47%;
+  right: -4%;
+}
+
+.permission-messages {
+  top: 47%;
+  left: -4%;
+}
+
+.permission-maps {
+  right: 2%;
+  bottom: 14%;
+}
+
+.permission-tasks {
+  bottom: 14%;
+  left: 2%;
+}
+
+.permission-docs {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .control-copy .section-label {
@@ -1228,7 +1342,7 @@ a {
   }
 
   .context-demo {
-    min-height: 620px;
+    min-height: 690px;
     margin-inline: -18px;
   }
 
@@ -1300,6 +1414,12 @@ a {
     right: 4%;
     bottom: 30px;
     left: 4%;
+  }
+
+  .notification-context {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
   }
 
   .statement,

@@ -58,7 +58,7 @@ const principles = [
 
       <div class="context-demo" aria-label="Calan filters many incoming signals, selects the relevant calendar, location, traffic, and weather context, and turns them into one useful notification">
         <div class="demo-caption">
-          <span>Live context / 8 signals</span>
+          <span class="demo-status"><i></i>Live context / 8 signals</span>
           <span>10:50 AM</span>
         </div>
 
@@ -71,6 +71,7 @@ const principles = [
           <path class="signal-path signal-path-later" d="M94 196 C127 222 150 239 174 253" />
           <path class="signal-path signal-path-later" d="M500 250 C468 270 445 284 418 296" />
           <path class="signal-path signal-path-later" d="M92 334 C132 350 164 360 196 364" />
+          <path class="signal-path signal-output" d="M300 373 C300 395 300 414 300 432" />
         </svg>
 
         <div class="signal signal-calendar signal-selected">
@@ -116,9 +117,9 @@ const principles = [
 
         <div class="signal-selector" aria-hidden="true">
           <span class="selector-ring"></span>
-          <span class="selector-kicker">Calan</span>
+          <span class="selector-kicker"><i></i>Calan / filter</span>
           <strong>Relevant now</strong>
-          <small>4 signals selected</small>
+          <small><b>04</b> of 08 signals selected</small>
         </div>
 
         <article class="notification">
@@ -129,8 +130,12 @@ const principles = [
           </div>
           <h2>Leave in 10 minutes</h2>
           <p>
-            Traffic is heavier than usual, so avoid the highway. Bring an umbrella for the trip home.
+            Your 11:00 meeting is 25 minutes away. Avoid the highway, and bring an umbrella for the trip home.
           </p>
+          <div class="notification-context">
+            <span>4 sources combined</span>
+            <span>Calendar / Location / Traffic / Weather</span>
+          </div>
         </article>
       </div>
 
@@ -213,12 +218,28 @@ const principles = [
 
     <section class="control shell reveal" id="control" aria-labelledby="control-title">
       <div class="control-visual" aria-hidden="true">
+        <svg class="control-links" viewBox="0 0 560 560" preserveAspectRatio="none">
+          <line x1="280" y1="280" x2="280" y2="34" />
+          <line x1="280" y1="280" x2="470" y2="116" />
+          <line x1="280" y1="280" x2="90" y2="116" />
+          <line x1="280" y1="280" x2="530" y2="280" />
+          <line x1="280" y1="280" x2="30" y2="280" />
+          <line x1="280" y1="280" x2="470" y2="448" />
+          <line x1="280" y1="280" x2="90" y2="448" />
+          <line x1="280" y1="280" x2="280" y2="526" />
+        </svg>
         <span class="control-circle control-circle-outer"></span>
+        <span class="control-circle control-circle-middle"></span>
         <span class="control-circle control-circle-inner"></span>
         <span class="control-core">You</span>
-        <span class="permission permission-one">Calendar <i>On</i></span>
-        <span class="permission permission-two">Location <i>While using</i></span>
-        <span class="permission permission-three">Messages <i>Off</i></span>
+        <span class="permission permission-calendar"><b>01</b>Calendar <i>On</i></span>
+        <span class="permission permission-email"><b>02</b>Email <i>Connected</i></span>
+        <span class="permission permission-whatsapp"><b>03</b>WhatsApp <i>Ask first</i></span>
+        <span class="permission permission-weather"><b>04</b>Weather <i>On</i></span>
+        <span class="permission permission-messages"><b>05</b>Messages <i>Off</i></span>
+        <span class="permission permission-maps"><b>06</b>Maps <i>While using</i></span>
+        <span class="permission permission-tasks"><b>07</b>Tasks <i>On</i></span>
+        <span class="permission permission-docs"><b>08</b>Docs <i>Connected</i></span>
       </div>
       <div class="control-copy">
         <p class="section-label">You decide what Calan knows</p>
