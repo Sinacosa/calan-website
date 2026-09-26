@@ -106,6 +106,16 @@ The demonstration should show contextual inputs converging into one actionable n
 evolve as the product interface matures, but it must remain calm, legible, and faithful to iPhone-first
 behavior.
 
+Several example moments may rotate through the final notification position, but only one notification
+should be readable at a time. Treat them as alternative scenarios, not as a growing notification inbox.
+Curved paths and small moving points may clarify how selected context reaches the final message.
+When the example changes, update the surrounding signal labels and their selected or deferred states so
+the visible inputs always explain the notification currently being composed.
+Keep the signal cards and connection paths visible between examples. Give each scenario a distinct
+arrangement, smoothly shifting the cards and reshaping their curves over 1.4 seconds. Crossfade the
+changing labels and notification content rather than replaying the full signal-entry animation for
+every scenario. Keep positional variation smaller on mobile so the notification stays within the viewport.
+
 ### Diagrams
 
 Use fine lines, circles, sparse labels, and controlled motion. Diagrams should explain a product idea,
@@ -114,6 +124,9 @@ not act as background decoration.
 The user-control diagram should present connected tools as a permission constellation around the user.
 Show a useful range of sources and a mix of states such as connected, on, ask first, while using, and
 off. This communicates breadth without implying that Calan receives unrestricted access.
+Tool labels may gently drift around their resting positions with staggered 9–12 second cycles, while
+the user remains stationary at the center. Keep labels upright, reduce travel on mobile, and disable
+the drift entirely for reduced-motion users.
 
 ### Forms
 
@@ -126,8 +139,11 @@ Motion should communicate timing and convergence.
 
 - Use slow, subtle entrances and small translations.
 - Avoid bouncing, parallax, continuous decorative movement, or attention-seeking loops.
-- The hero sequence may replay after its final notification has rested for five seconds. Each replay
+- The hero sequence may replay after its final notification has rested for twelve seconds. Each replay
   should repeat the full noise, selection, and message narrative rather than looping individual parts.
+- When multiple notification examples are present, let each one rest for twelve seconds after the
+  layout transition finishes before advancing.
+  Restart the full filtering sequence only after the last example.
 - Keep interactions responsive even when ambient animation is slow.
 - Honor `prefers-reduced-motion` with a complete static experience.
 - Content must remain understandable when JavaScript is unavailable.

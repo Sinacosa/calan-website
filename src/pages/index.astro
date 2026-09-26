@@ -20,6 +20,68 @@ const principles = [
     copy: "You receive one clear, timely suggestion only when there is something genuinely useful to know.",
   },
 ];
+
+const notificationExamples = [
+  {
+    title: "Leave in 10 minutes",
+    copy: "Your 11:00 meeting is 25 minutes away. Avoid the highway, and bring an umbrella for the trip home.",
+    sourceCount: "4 sources combined",
+    sources: "Calendar / Location / Traffic / Weather",
+    signals: [
+      { source: "Calendar", value: "Meeting at 11:00", selected: true },
+      { source: "News", value: "Morning digest", selected: false },
+      { source: "Location", value: "Still at home", selected: true },
+      { source: "Messages", value: "Lunch on Friday?", selected: false },
+      { source: "Traffic", value: "Heavy on A6", selected: true },
+      { source: "Tasks", value: "File expenses", selected: false },
+      { source: "Weather", value: "Rain at 5:00", selected: true },
+      { source: "Home", value: "Laundry is done", selected: false },
+    ],
+  },
+  {
+    title: "Your briefing is ready",
+    copy: "Maya shared the final numbers. You have a 20-minute focus block before tomorrow's review.",
+    sourceCount: "4 sources combined",
+    sources: "Calendar / Email / Docs / Tasks",
+    signals: [
+      { source: "Calendar", value: "Review tomorrow", selected: true },
+      { source: "Weather", value: "Clear this afternoon", selected: false },
+      { source: "Email", value: "Maya replied", selected: true },
+      { source: "Messages", value: "Lunch on Friday?", selected: false },
+      { source: "Docs", value: "Final figures shared", selected: true },
+      { source: "Maps", value: "Usual route", selected: false },
+      { source: "Tasks", value: "Briefing due", selected: true },
+      { source: "Home", value: "Laundry is done", selected: false },
+    ],
+  },
+  {
+    title: "Take the 18:20 train",
+    copy: "Your usual service is delayed. The next train gets you home 14 minutes sooner.",
+    sourceCount: "4 sources combined",
+    sources: "Calendar / Location / Transit / Maps",
+    signals: [
+      { source: "Calendar", value: "Dinner at 19:30", selected: true },
+      { source: "News", value: "Evening headlines", selected: false },
+      { source: "Location", value: "Leaving the office", selected: true },
+      { source: "Messages", value: "Weekend plans?", selected: false },
+      { source: "Transit", value: "Usual train delayed", selected: true },
+      { source: "Tasks", value: "File expenses", selected: false },
+      { source: "Maps", value: "18:20 is faster", selected: true },
+      { source: "Weather", value: "Clear evening", selected: false },
+    ],
+  },
+];
+
+const signalPositions = [
+  "signal-calendar",
+  "signal-digest",
+  "signal-location",
+  "signal-message",
+  "signal-traffic",
+  "signal-task",
+  "signal-weather",
+  "signal-routine",
+];
 ---
 
 <SiteLayout>
@@ -56,63 +118,47 @@ const principles = [
         </div>
       </div>
 
-      <div class="context-demo" aria-label="Calan filters many incoming signals, selects the relevant calendar, location, traffic, and weather context, and turns them into one useful notification">
+      <div class="context-demo" data-scenario="0" aria-label="Calan filters many incoming signals, selects the relevant context, and turns it into one useful notification">
         <div class="demo-caption">
           <span class="demo-status"><i></i>Live context / 8 signals</span>
           <span>10:50 AM</span>
         </div>
 
+        <div class="signal-field">
         <svg class="signal-map" viewBox="0 0 600 500" preserveAspectRatio="none" aria-hidden="true">
-          <path class="signal-path signal-path-selected" d="M102 112 C150 190 215 292 300 388" />
-          <path class="signal-path signal-path-selected" d="M505 176 C450 230 380 300 300 388" />
-          <path class="signal-path signal-path-selected" d="M113 274 C180 300 235 342 300 388" />
-          <path class="signal-path signal-path-selected" d="M505 320 C425 335 360 360 300 388" />
+          <path class="signal-path signal-path-selected" d="M102 112 C102 244 232 250 300 388" />
+          <path class="signal-path signal-path-selected" d="M505 176 C518 294 388 278 300 388" />
+          <path class="signal-path signal-path-selected" d="M113 274 C164 394 246 326 300 388" />
+          <path class="signal-path signal-path-selected" d="M505 320 C430 414 365 332 300 388" />
           <path class="signal-path signal-path-later" d="M490 98 C452 135 430 163 413 203" />
           <path class="signal-path signal-path-later" d="M94 196 C127 222 150 239 174 253" />
           <path class="signal-path signal-path-later" d="M500 250 C468 270 445 284 418 296" />
           <path class="signal-path signal-path-later" d="M92 334 C132 350 164 360 196 364" />
+          <path class="signal-path signal-flow" d="M102 112 C102 244 232 250 300 388" />
+          <path class="signal-path signal-flow" d="M505 176 C518 294 388 278 300 388" />
+          <path class="signal-path signal-flow" d="M113 274 C164 394 246 326 300 388" />
+          <path class="signal-path signal-flow" d="M505 320 C430 414 365 332 300 388" />
           <path class="signal-path signal-output" d="M300 373 C300 395 300 414 300 432" />
         </svg>
 
-        <div class="signal signal-calendar signal-selected">
-          <span class="signal-icon" aria-hidden="true">01</span>
-          <span><small>Calendar</small>Meeting at 11:00</span>
-          <span class="signal-state">now</span>
-        </div>
-        <div class="signal signal-digest signal-noise">
-          <span class="signal-icon" aria-hidden="true">02</span>
-          <span><small>News</small>Morning digest</span>
-          <span class="signal-state">later</span>
-        </div>
-        <div class="signal signal-location signal-selected">
-          <span class="signal-icon" aria-hidden="true">03</span>
-          <span><small>Location</small>Still at home</span>
-          <span class="signal-state">now</span>
-        </div>
-        <div class="signal signal-message signal-noise">
-          <span class="signal-icon" aria-hidden="true">04</span>
-          <span><small>Messages</small>Lunch on Friday?</span>
-          <span class="signal-state">later</span>
-        </div>
-        <div class="signal signal-traffic signal-selected">
-          <span class="signal-icon" aria-hidden="true">05</span>
-          <span><small>Traffic</small>Heavy on A6</span>
-          <span class="signal-state">now</span>
-        </div>
-        <div class="signal signal-task signal-noise">
-          <span class="signal-icon" aria-hidden="true">06</span>
-          <span><small>Tasks</small>File expenses</span>
-          <span class="signal-state">later</span>
-        </div>
-        <div class="signal signal-weather signal-selected">
-          <span class="signal-icon" aria-hidden="true">07</span>
-          <span><small>Weather</small>Rain at 5:00</span>
-          <span class="signal-state">now</span>
-        </div>
-        <div class="signal signal-routine signal-noise">
-          <span class="signal-icon" aria-hidden="true">08</span>
-          <span><small>Home</small>Laundry is done</span>
-          <span class="signal-state">later</span>
+        {notificationExamples[0].signals.map((signal, index) => (
+          <div
+            class:list={[
+              "signal",
+              signalPositions[index],
+              signal.selected ? "signal-selected" : "signal-noise",
+            ]}
+            data-signal
+          >
+            <span class="signal-icon" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <span class="signal-copy">
+              <small data-signal-source>{signal.source}</small>
+              <span data-signal-value>{signal.value}</span>
+            </span>
+            <span class="signal-state" data-signal-state>{signal.selected ? "now" : "later"}</span>
+          </div>
+        ))}
+
         </div>
 
         <div class="signal-selector" aria-hidden="true">
@@ -122,21 +168,29 @@ const principles = [
           <small><b>04</b> of 08 signals selected</small>
         </div>
 
-        <article class="notification">
-          <div class="notification-topline">
-            <span class="notification-mark">C</span>
-            <span>CALAN</span>
-            <time>now</time>
-          </div>
-          <h2>Leave in 10 minutes</h2>
-          <p>
-            Your 11:00 meeting is 25 minutes away. Avoid the highway, and bring an umbrella for the trip home.
-          </p>
-          <div class="notification-context">
-            <span>4 sources combined</span>
-            <span>Calendar / Location / Traffic / Weather</span>
-          </div>
-        </article>
+        <div class="notification-stage" aria-label="Examples of useful Calan notifications">
+          {notificationExamples.map((example, index) => (
+            <article
+              class:list={["notification", { "is-active": index === 0 }]}
+              data-notification
+              data-signals={JSON.stringify(example.signals)}
+              aria-hidden={index === 0 ? "false" : "true"}
+            >
+              <div class="notification-topline">
+                <span class="notification-mark">C</span>
+                <span>CALAN</span>
+                <time>now</time>
+              </div>
+              <h2>{example.title}</h2>
+              <p>{example.copy}</p>
+              <div class="notification-context">
+                <span>{example.sourceCount}</span>
+                <span>{example.sources}</span>
+                <span>{String(index + 1).padStart(2, "0")} / {String(notificationExamples.length).padStart(2, "0")}</span>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
 
       <a class="scroll-cue" href="#idea">
@@ -306,25 +360,84 @@ const principles = [
     }
 
     const contextDemo = document.querySelector<HTMLElement>(".context-demo");
-    const finalNotification = contextDemo?.querySelector<HTMLElement>(".notification");
+    const notificationStage = contextDemo?.querySelector<HTMLElement>(".notification-stage");
+    const notifications = Array.from(contextDemo?.querySelectorAll<HTMLElement>("[data-notification]") ?? []);
+    const signalElements = Array.from(contextDemo?.querySelectorAll<HTMLElement>("[data-signal]") ?? []);
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let replayTimer: number | undefined;
+    let activeNotification = 0;
+    const readingTime = 12000;
+    const layoutTransitionTime = 1400;
+
+    const updateSignals = (notification: HTMLElement) => {
+      const scenarioSignals = JSON.parse(notification.dataset.signals ?? "[]") as Array<{
+        source: string;
+        value: string;
+        selected: boolean;
+      }>;
+
+      signalElements.forEach((signalElement, index) => {
+        const signal = scenarioSignals[index];
+        if (!signal) return;
+
+        const source = signalElement.querySelector<HTMLElement>("[data-signal-source]");
+        const value = signalElement.querySelector<HTMLElement>("[data-signal-value]");
+        const state = signalElement.querySelector<HTMLElement>("[data-signal-state]");
+
+        if (source) source.textContent = signal.source;
+        if (value) value.textContent = signal.value;
+        if (state) state.textContent = signal.selected ? "now" : "later";
+        signalElement.classList.toggle("signal-selected", signal.selected);
+        signalElement.classList.toggle("signal-noise", !signal.selected);
+      });
+    };
+
+    const showNotification = (index: number) => {
+      activeNotification = index;
+      if (contextDemo) contextDemo.dataset.scenario = String(index);
+      notifications.forEach((notification, notificationIndex) => {
+        const isActive = notificationIndex === index;
+        notification.classList.toggle("is-active", isActive);
+        notification.setAttribute("aria-hidden", String(!isActive));
+      });
+      const activeExample = notifications[index];
+      if (activeExample) updateSignals(activeExample);
+    };
 
     const replayDemo = () => {
       if (!contextDemo || reducedMotion.matches) return;
+      showNotification(0);
       contextDemo.classList.add("is-resetting");
       void contextDemo.offsetWidth;
       contextDemo.classList.remove("is-resetting");
     };
 
-    finalNotification?.addEventListener("animationend", (event) => {
+    const advanceNotification = () => {
+      if (reducedMotion.matches) return;
+
+      if (activeNotification < notifications.length - 1) {
+        contextDemo?.classList.add("is-switching-scenario");
+        replayTimer = window.setTimeout(() => {
+          showNotification(activeNotification + 1);
+          contextDemo?.classList.remove("is-switching-scenario");
+          replayTimer = window.setTimeout(advanceNotification, readingTime + layoutTransitionTime);
+        }, 360);
+        return;
+      }
+
+      replayDemo();
+    };
+
+    notificationStage?.addEventListener("animationend", (event) => {
       if (event.animationName !== "notification-in" || reducedMotion.matches) return;
       window.clearTimeout(replayTimer);
-      replayTimer = window.setTimeout(replayDemo, 5000);
+      replayTimer = window.setTimeout(advanceNotification, readingTime);
     });
 
     reducedMotion.addEventListener("change", (event) => {
       window.clearTimeout(replayTimer);
+      contextDemo?.classList.remove("is-switching-scenario");
+      showNotification(0);
       if (!event.matches) replayDemo();
     });
 

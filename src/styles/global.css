@@ -284,6 +284,15 @@ a {
   box-shadow: 0 8px 30px rgba(17, 17, 15, 0.03);
   backdrop-filter: blur(8px);
   animation: signal-in 650ms var(--delay, 0ms) both;
+  transition:
+    opacity 280ms ease,
+    translate 1400ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.signal-field {
+  position: absolute;
+  inset: 0 24px;
 }
 
 .signal small {
@@ -293,6 +302,13 @@ a {
   font-size: 8px;
   letter-spacing: 0.11em;
   text-transform: uppercase;
+}
+
+.signal-copy,
+.signal-state {
+  transition:
+    opacity 320ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .signal-icon {
@@ -323,6 +339,7 @@ a {
   color: var(--paper);
   border-color: var(--ink);
   background: var(--ink);
+  animation: signal-icon-breathe 4.8s calc(2.5s + var(--delay, 0ms)) ease-in-out infinite;
 }
 
 .signal-selected .signal-state {
@@ -360,7 +377,7 @@ a {
   --delay: 560ms;
   --angle: 1.8deg;
   top: 166px;
-  left: -2%;
+  left: 0;
 }
 
 .signal-traffic {
@@ -374,7 +391,7 @@ a {
   --delay: 820ms;
   --angle: -1.8deg;
   top: 222px;
-  right: -3%;
+  right: 0;
 }
 
 .signal-weather {
@@ -403,7 +420,62 @@ a {
 
 .signal-path {
   fill: none;
+  stroke-linecap: round;
   vector-effect: non-scaling-stroke;
+  transition: d 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Each scenario rearranges the inputs without restarting their entry animations.
+   Vertical offsets match the SVG's 500-unit viewBox rendered at 430px. */
+.context-demo[data-scenario="1"] .signal-calendar { translate: 0 20.64px; }
+.context-demo[data-scenario="1"] .signal-location { translate: 0 -17.2px; }
+.context-demo[data-scenario="1"] .signal-traffic { translate: 0 -13.76px; }
+.context-demo[data-scenario="1"] .signal-weather { translate: 0 10.32px; }
+.context-demo[data-scenario="1"] .signal-digest { translate: -16px 8px; }
+.context-demo[data-scenario="1"] .signal-message { translate: 14px 14px; }
+.context-demo[data-scenario="1"] .signal-task { translate: -10px -10px; }
+.context-demo[data-scenario="1"] .signal-routine { translate: 16px -8px; }
+
+.context-demo[data-scenario="2"] .signal-calendar { translate: 0 -10.32px; }
+.context-demo[data-scenario="2"] .signal-location { translate: 0 17.2px; }
+.context-demo[data-scenario="2"] .signal-traffic { translate: 0 13.76px; }
+.context-demo[data-scenario="2"] .signal-weather { translate: 0 -13.76px; }
+.context-demo[data-scenario="2"] .signal-digest { translate: -8px 14px; }
+.context-demo[data-scenario="2"] .signal-message { translate: 8px -12px; }
+.context-demo[data-scenario="2"] .signal-task { translate: -18px 8px; }
+.context-demo[data-scenario="2"] .signal-routine { translate: 10px 12px; }
+
+.context-demo[data-scenario="1"] .signal-map path:nth-child(1),
+.context-demo[data-scenario="1"] .signal-map path:nth-child(9) {
+  d: path("M102 136 C102 260 210 278 300 388");
+}
+.context-demo[data-scenario="1"] .signal-map path:nth-child(2),
+.context-demo[data-scenario="1"] .signal-map path:nth-child(10) {
+  d: path("M505 156 C540 282 360 266 300 388");
+}
+.context-demo[data-scenario="1"] .signal-map path:nth-child(3),
+.context-demo[data-scenario="1"] .signal-map path:nth-child(11) {
+  d: path("M113 258 C145 382 230 330 300 388");
+}
+.context-demo[data-scenario="1"] .signal-map path:nth-child(4),
+.context-demo[data-scenario="1"] .signal-map path:nth-child(12) {
+  d: path("M505 332 C440 425 350 340 300 388");
+}
+.context-demo[data-scenario="2"] .signal-map path:nth-child(1),
+.context-demo[data-scenario="2"] .signal-map path:nth-child(9) {
+  d: path("M102 100 C90 252 245 260 300 388");
+}
+.context-demo[data-scenario="2"] .signal-map path:nth-child(2),
+.context-demo[data-scenario="2"] .signal-map path:nth-child(10) {
+  d: path("M505 196 C500 306 405 288 300 388");
+}
+.context-demo[data-scenario="2"] .signal-map path:nth-child(3),
+.context-demo[data-scenario="2"] .signal-map path:nth-child(11) {
+  d: path("M113 290 C175 414 250 330 300 388");
+}
+.context-demo[data-scenario="2"] .signal-map path:nth-child(4),
+.context-demo[data-scenario="2"] .signal-map path:nth-child(12) {
+  d: path("M505 304 C425 400 365 320 300 388");
 }
 
 .signal-path-selected {
@@ -419,6 +491,14 @@ a {
   stroke-width: 1;
   stroke-dasharray: 3 6;
   animation: path-recede 500ms 1.8s forwards;
+}
+
+.signal-flow {
+  opacity: 0;
+  stroke: rgba(17, 17, 15, 0.72);
+  stroke-width: 2.4;
+  stroke-dasharray: 1 22;
+  animation: flow-path 4.8s 2.55s linear infinite;
 }
 
 .signal-output {
@@ -452,6 +532,7 @@ a {
   inset: -29px -62px;
   border: 1px solid rgba(17, 17, 15, 0.12);
   border-radius: 50%;
+  animation: selector-breathe 5.5s 2.4s ease-in-out infinite;
 }
 
 .selector-kicker {
@@ -487,19 +568,73 @@ a {
   font-weight: 600;
 }
 
-.notification {
+.notification-stage {
   position: absolute;
   z-index: 3;
   right: 7%;
   bottom: 50px;
   left: 7%;
+  height: 170px;
+  animation: notification-in 800ms 2.35s both;
+  transition: translate 1400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.context-demo[data-scenario="1"] .notification-stage { translate: -12px 8px; }
+.context-demo[data-scenario="2"] .notification-stage { translate: 12px 3px; }
+
+.context-demo[data-scenario="1"] .signal-output {
+  d: path("M300 373 C300 400 289 416 289 441");
+}
+.context-demo[data-scenario="2"] .signal-output {
+  d: path("M300 373 C300 400 311 414 311 436");
+}
+
+.notification-stage::before,
+.notification-stage::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background: rgba(17, 17, 15, 0.2);
+  content: "";
+}
+
+.notification-stage::before {
+  opacity: 0.28;
+  transform: translateY(-8px) scale(0.975);
+}
+
+.notification-stage::after {
+  opacity: 0.14;
+  transform: translateY(-15px) scale(0.95);
+}
+
+.notification {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
   padding: 18px 20px 21px;
+  opacity: 0;
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 18px;
   background: rgba(17, 17, 15, 0.96);
   box-shadow: 0 28px 70px rgba(17, 17, 15, 0.2);
-  animation: notification-in 800ms 2.35s both;
+  pointer-events: none;
+  transform: translateY(8px) scale(0.985);
+  transition:
+    opacity 550ms ease,
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.notification.is-active {
+  z-index: 2;
+  opacity: 1;
+  pointer-events: auto;
+  animation: notification-float 5s ease-in-out infinite;
 }
 
 .notification-topline {
@@ -549,7 +684,7 @@ a {
   display: flex;
   gap: 18px;
   justify-content: space-between;
-  margin-top: 14px;
+  margin-top: auto;
   padding-top: 11px;
   color: rgba(255, 255, 255, 0.4);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -560,6 +695,7 @@ a {
 
 .context-demo.is-resetting .signal,
 .context-demo.is-resetting .signal-selector,
+.context-demo.is-resetting .notification-stage,
 .context-demo.is-resetting .notification,
 .context-demo.is-resetting .signal-path {
   opacity: 0;
@@ -568,6 +704,18 @@ a {
 
 .context-demo.is-resetting .signal-path-selected {
   stroke-dashoffset: 650;
+}
+
+.context-demo.is-switching-scenario .signal-copy,
+.context-demo.is-switching-scenario .signal-state {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.context-demo.is-switching-scenario .notification.is-active {
+  opacity: 0;
+  animation: none !important;
+  transform: translateY(-7px) scale(0.99);
 }
 
 .scroll-cue {
@@ -864,6 +1012,10 @@ a {
 }
 
 .permission {
+  --drift-x: 6px;
+  --drift-y: 8px;
+  --drift-duration: 9s;
+  --drift-delay: 0s;
   position: absolute;
   z-index: 3;
   display: flex;
@@ -875,6 +1027,14 @@ a {
   font-size: 9px;
   white-space: nowrap;
   box-shadow: 0 12px 40px rgba(17, 17, 15, 0.05);
+  animation: tool-drift var(--drift-duration) var(--drift-delay) ease-in-out infinite;
+}
+
+/* Animate translate separately so centered labels retain their positioning transform. */
+@keyframes tool-drift {
+  0%, 100% { translate: 0 0; }
+  30% { translate: var(--drift-x) calc(var(--drift-y) * -0.5); }
+  65% { translate: calc(var(--drift-x) * 0.4) var(--drift-y); }
 }
 
 .permission b {
@@ -897,42 +1057,63 @@ a {
 }
 
 .permission-calendar {
+  --drift-duration: 10s;
+  --drift-delay: -2s;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .permission-email {
+  --drift-x: -6px;
+  --drift-duration: 11s;
+  --drift-delay: -5s;
   top: 16%;
   right: 0;
 }
 
 .permission-whatsapp {
+  --drift-y: -7px;
+  --drift-duration: 12s;
+  --drift-delay: -3s;
   top: 16%;
   left: 0;
 }
 
 .permission-weather {
+  --drift-x: -6px;
+  --drift-delay: -6s;
   top: 47%;
   right: -4%;
 }
 
 .permission-messages {
+  --drift-y: -8px;
+  --drift-duration: 11s;
+  --drift-delay: -1s;
   top: 47%;
   left: -4%;
 }
 
 .permission-maps {
+  --drift-x: -6px;
+  --drift-duration: 12s;
+  --drift-delay: -7s;
   right: 2%;
   bottom: 14%;
 }
 
 .permission-tasks {
+  --drift-y: -7px;
+  --drift-duration: 10s;
+  --drift-delay: -4s;
   bottom: 14%;
   left: 2%;
 }
 
 .permission-docs {
+  --drift-x: -5px;
+  --drift-delay: -3s;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
@@ -1133,6 +1314,19 @@ a {
   to { stroke-dashoffset: 0; }
 }
 
+@keyframes flow-path {
+  0%, 100% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+  }
+  14%, 86% {
+    opacity: 0.62;
+  }
+  100% {
+    stroke-dashoffset: -180;
+  }
+}
+
 @keyframes path-recede {
   to { opacity: 0.25; }
 }
@@ -1148,6 +1342,16 @@ a {
   }
 }
 
+@keyframes selector-breathe {
+  0%, 100% { opacity: 0.7; transform: scale(0.98); }
+  50% { opacity: 1; transform: scale(1.025); }
+}
+
+@keyframes signal-icon-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(17, 17, 15, 0); }
+  50% { box-shadow: 0 0 0 5px rgba(17, 17, 15, 0.07); }
+}
+
 @keyframes notification-in {
   from {
     opacity: 0;
@@ -1157,6 +1361,11 @@ a {
     opacity: 1;
     transform: none;
   }
+}
+
+@keyframes notification-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1); }
 }
 
 @keyframes scroll-dot {
@@ -1213,7 +1422,7 @@ a {
   }
 
   .context-demo {
-    min-height: 600px;
+    min-height: 670px;
   }
 
   .scroll-cue {
@@ -1342,7 +1551,7 @@ a {
   }
 
   .context-demo {
-    min-height: 690px;
+    min-height: 710px;
     margin-inline: -18px;
   }
 
@@ -1365,7 +1574,7 @@ a {
 
   .signal-digest {
     top: 68px;
-    right: -2%;
+    right: 0;
   }
 
   .signal-location {
@@ -1375,7 +1584,7 @@ a {
 
   .signal-message {
     top: 157px;
-    left: -4%;
+    left: 0;
   }
 
   .signal-traffic {
@@ -1385,7 +1594,7 @@ a {
 
   .signal-task {
     top: 214px;
-    right: -4%;
+    right: 0;
   }
 
   .signal-weather {
@@ -1395,7 +1604,7 @@ a {
 
   .signal-routine {
     top: 297px;
-    left: -4%;
+    left: 0;
   }
 
   .signal-state {
@@ -1406,20 +1615,43 @@ a {
     height: 455px;
   }
 
+  .context-demo[data-scenario="1"] .signal-calendar { translate: 0 21.84px; }
+  .context-demo[data-scenario="1"] .signal-location { translate: 0 -18.2px; }
+  .context-demo[data-scenario="1"] .signal-traffic { translate: 0 -14.56px; }
+  .context-demo[data-scenario="1"] .signal-weather { translate: 0 10.92px; }
+  .context-demo[data-scenario="2"] .signal-calendar { translate: 0 -10.92px; }
+  .context-demo[data-scenario="2"] .signal-location { translate: 0 18.2px; }
+  .context-demo[data-scenario="2"] .signal-traffic { translate: 0 14.56px; }
+  .context-demo[data-scenario="2"] .signal-weather { translate: 0 -14.56px; }
+
+  .context-demo[data-scenario="1"] .notification-stage { translate: -5px 8px; }
+  .context-demo[data-scenario="2"] .notification-stage { translate: 5px 3px; }
+
   .signal-selector {
     top: 377px;
   }
 
-  .notification {
+  .notification-stage {
     right: 4%;
     bottom: 30px;
     left: 4%;
+    height: 195px;
   }
 
   .notification-context {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 5px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 5px 12px;
+  }
+
+  .notification-context span:nth-child(2) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .notification-context span:last-child {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .statement,
@@ -1476,8 +1708,17 @@ a {
   }
 
   .permission {
+    --drift-x: 3px;
+    --drift-y: 4px;
     padding: 8px 10px;
     font-size: 9px;
+  }
+
+  .permission-email,
+  .permission-weather,
+  .permission-maps,
+  .permission-docs {
+    --drift-x: -3px;
   }
 
   .waitlist-inner {
@@ -1532,6 +1773,17 @@ a {
     animation-iteration-count: 1 !important;
     transition-delay: 0ms !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .signal-flow {
+    display: none;
+  }
+
+  .notification.is-active,
+  .selector-ring,
+  .signal-selected .signal-icon,
+  .permission {
+    animation: none !important;
   }
 }
 
