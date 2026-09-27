@@ -12,10 +12,6 @@ const { locale } = Astro.props;
 const t = translations[locale];
 const language = localeConfig[locale];
 const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
-const siteURL = Astro.site ?? new URL(Astro.url.origin);
-const pageURL = new URL(getLocalizedPath(locale), siteURL);
-const websiteId = `${pageURL.href}#website`;
-const webpageId = `${pageURL.href}#webpage`;
 const arrow = language.dir === "rtl" ? "←" : "→";
 
 const signalPositions = [
@@ -40,21 +36,6 @@ const permissionPositions = [
   "permission-docs",
 ];
 
-const structuredData = [
-  {
-    "@type": "SoftwareApplication",
-    "@id": `${pageURL.href}#software`,
-    name: "Calan",
-    url: pageURL.href,
-    image: new URL("/og-image.png", siteURL).href,
-    applicationCategory: "ProductivityApplication",
-    operatingSystem: "iOS",
-    description: t.meta.applicationDescription,
-    inLanguage: language.htmlLang,
-    isPartOf: { "@id": websiteId },
-    mainEntityOfPage: { "@id": webpageId },
-  },
-];
 ---
 
 <SiteLayout
@@ -62,7 +43,6 @@ const structuredData = [
   description={t.meta.description}
   socialImageAlt={t.meta.socialImageAlt}
   siteDescription={t.meta.applicationDescription}
-  structuredData={structuredData}
   {locale}
 >
   <a class="skip-link" href="#top">{t.common.skipToContent}</a>

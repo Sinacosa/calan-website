@@ -21,6 +21,16 @@ export default defineConfig({
           it: "it",
         },
       },
+      serialize(item) {
+        const defaultLink = item.links?.find((link) => link.lang === "en");
+
+        if (!defaultLink) return item;
+
+        return {
+          ...item,
+          links: [...item.links, { lang: "x-default", url: defaultLink.url }],
+        };
+      },
     }),
   ],
   build: {

@@ -9,7 +9,6 @@ interface Props {
   noindex?: boolean;
   socialImage?: string;
   socialImageAlt?: string;
-  structuredData?: Array<Record<string, unknown>>;
   locale?: Locale;
   pagePath?: LocalizedPage;
   alternatePages?: boolean;
@@ -23,7 +22,6 @@ const {
   noindex = false,
   socialImage = "/og-image.png",
   socialImageAlt = "Calan: The right notification at the right time.",
-  structuredData = [],
   locale = "en",
   pagePath = "",
   alternatePages = true,
@@ -67,7 +65,6 @@ const schema = {
         height: 630,
       },
     },
-    ...structuredData,
   ],
 };
 const serializedSchema = JSON.stringify(schema).replace(/</g, "\\u003c");

@@ -80,7 +80,10 @@ The site generates canonical URLs, Open Graph and Twitter metadata, Schema.org s
 
 Complete these production steps after deploying:
 
-1. Configure Cloudflare to redirect HTTP and any `www` hostname to `https://calan.app` in one hop.
+1. Attach both `calan.app` and `www.calan.app` to the Cloudflare Pages project, then configure Cloudflare
+   to redirect HTTP and `www` requests to `https://calan.app` in one hop. Confirm the `www` hostname
+   reaches Cloudflare Pages before adding the redirect; a hostname returning an origin error cannot run
+   the redirect rule.
 2. Add `calan.app` as a Domain property in Google Search Console and verify it with the provided DNS
    record. Submit `https://calan.app/sitemap-index.xml` from the Sitemaps screen.
 3. Import the verified property into Bing Webmaster Tools and submit the same sitemap.
