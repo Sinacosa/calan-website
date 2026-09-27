@@ -1,0 +1,515 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import LanguagePicker from "./LanguagePicker.astro";
+import { translations } from "../i18n";
+import { getLocalizedPath, localeConfig, type Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = translations[locale];
+const language = localeConfig[locale];
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const siteURL = Astro.site ?? new URL(Astro.url.origin);
+const pageURL = new URL(getLocalizedPath(locale), siteURL);
+const websiteId = `${pageURL.href}#website`;
+const webpageId = `${pageURL.href}#webpage`;
+const arrow = language.dir === "rtl" ? "←" : "→";
+
+const signalPositions = [
+  "signal-calendar",
+  "signal-digest",
+  "signal-location",
+  "signal-message",
+  "signal-traffic",
+  "signal-task",
+  "signal-weather",
+  "signal-routine",
+];
+
+const permissionPositions = [
+  "permission-calendar",
+  "permission-email",
+  "permission-whatsapp",
+  "permission-weather",
+  "permission-messages",
+  "permission-maps",
+  "permission-tasks",
+  "permission-docs",
+];
+
+const structuredData = [
+  {
+    "@type": "SoftwareApplication",
+    "@id": `${pageURL.href}#software`,
+    name: "Calan",
+    url: pageURL.href,
+    image: new URL("/og-image.png", siteURL).href,
+    applicationCategory: "ProductivityApplication",
+    operatingSystem: "iOS",
+    description: t.meta.applicationDescription,
+    inLanguage: language.htmlLang,
+    isPartOf: { "@id": websiteId },
+    mainEntityOfPage: { "@id": webpageId },
+  },
+];
+---
+
+<SiteLayout
+  title={t.meta.title}
+  description={t.meta.description}
+  socialImageAlt={t.meta.socialImageAlt}
+  siteDescription={t.meta.applicationDescription}
+  structuredData={structuredData}
+  {locale}
+>
+  <a class="skip-link" href="#top">{t.common.skipToContent}</a>
+  <header class="site-header shell">
+    <a class="wordmark" href="#top" aria-label={t.common.homeAriaLabel}>Calan</a>
+    <nav aria-label={t.common.navigationAriaLabel}>
+      <a href="#how-it-works">{t.navigation.howItWorks}</a>
+      <a href="#control">{t.navigation.yourControl}</a>
+    </nav>
+    <div class="header-actions">
+      <LanguagePicker {locale} />
+      <a class="header-cta" href="#waitlist">{t.navigation.joinWaitlist} <span aria-hidden="true">{arrow}</span></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span>{t.hero.eyebrow}</p>
+        <h1 id="hero-title">{t.hero.title}<br /><em>{t.hero.emphasis}</em></h1>
+        <p class="hero-intro">{t.hero.intro}</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#waitlist">{t.navigation.joinWaitlist} <span aria-hidden="true">{arrow}</span></a>
+          <p>{t.hero.availability}</p>
+        </div>
+      </div>
+
+      <div
+        class="context-demo"
+        data-scenario="0"
+        data-now={t.demo.now}
+        data-later={t.demo.later}
+        role="group"
+        aria-label={t.demo.ariaLabel}
+      >
+        <div class="demo-caption">
+          <span class="demo-status"><i></i>{t.demo.liveContext}</span>
+          <span class="demo-caption-actions">
+            <bdi>{t.demo.time}</bdi>
+            <button
+              class="demo-motion-toggle"
+              type="button"
+              data-motion-toggle
+              data-pause={t.demo.pauseAnimation}
+              data-resume={t.demo.resumeAnimation}
+              aria-label={t.demo.pauseAnimation}
+              title={t.demo.pauseAnimation}
+              aria-pressed="false"
+            ><span aria-hidden="true">Ⅱ</span></button>
+          </span>
+        </div>
+
+        <div class="signal-field">
+          <svg class="signal-map" viewBox="0 0 600 500" preserveAspectRatio="none" aria-hidden="true">
+            <path class="signal-path signal-path-selected" d="M102 112 C102 244 232 250 300 388" />
+            <path class="signal-path signal-path-selected" d="M505 176 C518 294 388 278 300 388" />
+            <path class="signal-path signal-path-selected" d="M113 274 C164 394 246 326 300 388" />
+            <path class="signal-path signal-path-selected" d="M505 320 C430 414 365 332 300 388" />
+            <path class="signal-path signal-path-later" d="M490 98 C452 135 430 163 413 203" />
+            <path class="signal-path signal-path-later" d="M94 196 C127 222 150 239 174 253" />
+            <path class="signal-path signal-path-later" d="M500 250 C468 270 445 284 418 296" />
+            <path class="signal-path signal-path-later" d="M92 334 C132 350 164 360 196 364" />
+            <path class="signal-path signal-flow" d="M102 112 C102 244 232 250 300 388" />
+            <path class="signal-path signal-flow" d="M505 176 C518 294 388 278 300 388" />
+            <path class="signal-path signal-flow" d="M113 274 C164 394 246 326 300 388" />
+            <path class="signal-path signal-flow" d="M505 320 C430 414 365 332 300 388" />
+            <path class="signal-path signal-output" d="M300 373 C300 395 300 414 300 432" />
+          </svg>
+
+          {t.demo.scenarios[0].signals.map((signal, index) => (
+            <div
+              class:list={["signal", signalPositions[index], index % 2 === 0 ? "signal-selected" : "signal-noise"]}
+              data-signal
+            >
+              <span class="signal-icon" aria-hidden="true"><bdi>{String(index + 1).padStart(2, "0")}</bdi></span>
+              <span class="signal-copy">
+                <small data-signal-source>{signal.source}</small>
+                <bdi data-signal-value>{signal.value}</bdi>
+              </span>
+              <span class="signal-state" data-signal-state>{index % 2 === 0 ? t.demo.now : t.demo.later}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="signal-selector" aria-hidden="true">
+          <span class="selector-ring"></span>
+          <span class="selector-kicker"><i></i>{t.demo.filterLabel}</span>
+          <strong>{t.demo.relevantNow}</strong>
+          <small><b><bdi>04</bdi></b> {t.demo.selectedCount}</small>
+        </div>
+
+        <div class="notification-stage" role="group" aria-label={t.demo.notificationsAriaLabel}>
+          {t.demo.scenarios.map((example, index) => (
+            <article
+              class:list={["notification", { "is-active": index === 0 }]}
+              data-notification
+              data-signals={JSON.stringify(example.signals.map((signal, signalIndex) => ({ ...signal, selected: signalIndex % 2 === 0 })))}
+              aria-hidden={index === 0 ? "false" : "true"}
+            >
+              <div class="notification-topline">
+                <span class="notification-mark">C</span>
+                <span>CALAN</span>
+                <time>{t.demo.now}</time>
+              </div>
+              <h2>{example.title}</h2>
+              <p>{example.copy}</p>
+              <div class="notification-context">
+                <span>{example.sourceCount}</span>
+                <bdi>{example.sources}</bdi>
+                <span><bdi>{String(index + 1).padStart(2, "0")} / {String(t.demo.scenarios.length).padStart(2, "0")}</bdi></span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <a class="scroll-cue" href="#idea">
+        <span aria-hidden="true"></span>
+        {t.hero.scrollCue}
+      </a>
+    </section>
+
+    <section class="statement shell reveal" id="idea" aria-labelledby="statement-title">
+      <p class="section-label">{t.statement.label}</p>
+      <h2 id="statement-title">{t.statement.title}<br /><em>{t.statement.emphasis}</em></h2>
+      <div class="statement-copy">
+        <p>{t.statement.copy}</p>
+        <p class="quiet-line">{t.statement.quietLine}</p>
+      </div>
+    </section>
+
+    <section class="principles shell" id="how-it-works" aria-labelledby="principles-title">
+      <div class="section-heading reveal">
+        <p class="section-label">{t.principles.label}</p>
+        <h2 id="principles-title">{t.principles.title}<br /><em>{t.principles.emphasis}</em></h2>
+      </div>
+      <div class="principle-list">
+        {t.principles.items.map((principle, index) => (
+          <article class="principle reveal">
+            <span class="principle-number"><bdi>{String(index + 1).padStart(2, "0")}</bdi></span>
+            <h3>{principle.title}</h3>
+            <p>{principle.copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="day-section" aria-labelledby="day-title">
+      <div class="day-inner shell">
+        <div class="day-heading reveal">
+          <p class="section-label section-label-light">{t.timeline.label}</p>
+          <h2 id="day-title">{t.timeline.title}<br /><em>{t.timeline.emphasis}</em></h2>
+          <p>{t.timeline.intro}</p>
+        </div>
+        <ol class="day-timeline" aria-label={t.timeline.ariaLabel}>
+          {t.timeline.items.map((item, index) => (
+            <li class:list={[{ featured: index === 1 }, "reveal"]}>
+              <time><bdi>{item.time}</bdi></time>
+              <div>
+                <span>{item.label}</span>
+                <p>{item.copy}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="control shell reveal" id="control" aria-labelledby="control-title">
+      <div class="control-visual" aria-hidden="true">
+        <svg class="control-links" viewBox="0 0 560 560" preserveAspectRatio="none">
+          <line x1="280" y1="280" x2="280" y2="34" />
+          <line x1="280" y1="280" x2="470" y2="116" />
+          <line x1="280" y1="280" x2="90" y2="116" />
+          <line x1="280" y1="280" x2="530" y2="280" />
+          <line x1="280" y1="280" x2="30" y2="280" />
+          <line x1="280" y1="280" x2="470" y2="448" />
+          <line x1="280" y1="280" x2="90" y2="448" />
+          <line x1="280" y1="280" x2="280" y2="526" />
+        </svg>
+        <span class="control-circle control-circle-outer"></span>
+        <span class="control-circle control-circle-middle"></span>
+        <span class="control-circle control-circle-inner"></span>
+        <span class="control-core">{t.control.core}</span>
+        {t.control.permissions.map((permission, index) => (
+          <span class:list={["permission", permissionPositions[index]]}>
+            <b><bdi>{String(index + 1).padStart(2, "0")}</bdi></b>{permission.name}<i>{permission.state}</i>
+          </span>
+        ))}
+      </div>
+      <div class="control-copy">
+        <p class="section-label">{t.control.label}</p>
+        <h2 id="control-title">{t.control.title}<br /><em>{t.control.emphasis}</em></h2>
+        <p>{t.control.copy}</p>
+        <a href={getLocalizedPath(locale, "privacy")}>{t.control.privacyLink} <span aria-hidden="true">{arrow}</span></a>
+      </div>
+    </section>
+
+    <section class="waitlist" id="waitlist" aria-labelledby="waitlist-title">
+      <div class="waitlist-inner shell reveal">
+        <p class="section-label section-label-light">{t.waitlist.label}</p>
+        <h2 id="waitlist-title">{t.waitlist.title}<br /><em>{t.waitlist.emphasis}</em></h2>
+        <p class="waitlist-copy">{t.waitlist.copy}</p>
+
+        <form
+          class="waitlist-form"
+          data-waitlist-form
+          data-invalid-email={t.waitlist.status.invalidEmail}
+          data-joining={t.waitlist.status.joining}
+          data-subscribed={t.waitlist.status.subscribed}
+          data-duplicate={t.waitlist.status.duplicate}
+          data-security={t.waitlist.status.security}
+          data-unavailable={t.waitlist.status.unavailable}
+          data-error={t.waitlist.status.error}
+          method="post"
+          action="/api/waitlist"
+          novalidate
+        >
+          <label for={`email-${locale}`}>{t.waitlist.emailLabel}</label>
+          <div class="form-row">
+            <input
+              id={`email-${locale}`}
+              name="email"
+              type="email"
+              dir="ltr"
+              autocomplete="email"
+              inputmode="email"
+              maxlength="254"
+              aria-describedby={`form-status-${locale}`}
+              placeholder={t.waitlist.emailPlaceholder}
+              required
+            />
+            <button type="submit">{t.waitlist.submit} <span aria-hidden="true">{arrow}</span></button>
+          </div>
+          {turnstileSiteKey && (
+            <div
+              class="cf-turnstile"
+              data-sitekey={turnstileSiteKey}
+              data-theme="dark"
+              data-size="flexible"
+              data-language={language.htmlLang}
+            ></div>
+          )}
+          <p class="form-note">{t.waitlist.note}</p>
+          <p id={`form-status-${locale}`} class="form-status" data-form-status aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <a class="wordmark wordmark-light" href="#top">Calan</a>
+      <p>{t.footer.tagline}</p>
+      <div class="footer-links">
+        <a href={getLocalizedPath(locale, "privacy")}>{t.footer.privacy}</a>
+        <a href={getLocalizedPath(locale, "terms")}>{t.footer.terms}</a>
+        <span>&copy; {new Date().getFullYear()} Calan</span>
+      </div>
+    </div>
+  </footer>
+
+  {turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+  <script>
+    const revealElements = document.querySelectorAll(".reveal");
+
+    if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.documentElement.classList.add("has-reveal");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14 });
+
+      revealElements.forEach((element) => observer.observe(element));
+    }
+
+    const contextDemo = document.querySelector<HTMLElement>(".context-demo");
+    const notificationStage = contextDemo?.querySelector<HTMLElement>(".notification-stage");
+    const notifications = Array.from(contextDemo?.querySelectorAll<HTMLElement>("[data-notification]") ?? []);
+    const signalElements = Array.from(contextDemo?.querySelectorAll<HTMLElement>("[data-signal]") ?? []);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const motionToggle = contextDemo?.querySelector<HTMLButtonElement>("[data-motion-toggle]");
+    let replayTimer: number | undefined;
+    let activeNotification = 0;
+    const readingTime = 12000;
+    const layoutTransitionTime = 1400;
+
+    const updateSignals = (notification: HTMLElement) => {
+      const scenarioSignals = JSON.parse(notification.dataset.signals ?? "[]") as Array<{
+        source: string;
+        value: string;
+        selected: boolean;
+      }>;
+
+      signalElements.forEach((signalElement, index) => {
+        const signal = scenarioSignals[index];
+        if (!signal) return;
+
+        const source = signalElement.querySelector<HTMLElement>("[data-signal-source]");
+        const value = signalElement.querySelector<HTMLElement>("[data-signal-value]");
+        const state = signalElement.querySelector<HTMLElement>("[data-signal-state]");
+
+        if (source) source.textContent = signal.source;
+        if (value) value.textContent = signal.value;
+        if (state) state.textContent = signal.selected ? contextDemo?.dataset.now ?? "" : contextDemo?.dataset.later ?? "";
+        signalElement.classList.toggle("signal-selected", signal.selected);
+        signalElement.classList.toggle("signal-noise", !signal.selected);
+      });
+    };
+
+    const showNotification = (index: number) => {
+      activeNotification = index;
+      if (contextDemo) contextDemo.dataset.scenario = String(index);
+      notifications.forEach((notification, notificationIndex) => {
+        const isActive = notificationIndex === index;
+        notification.classList.toggle("is-active", isActive);
+        notification.setAttribute("aria-hidden", String(!isActive));
+      });
+      const activeExample = notifications[index];
+      if (activeExample) updateSignals(activeExample);
+    };
+
+    const replayDemo = () => {
+      if (!contextDemo || reducedMotion.matches) return;
+      showNotification(0);
+      contextDemo.classList.add("is-resetting");
+      void contextDemo.offsetWidth;
+      contextDemo.classList.remove("is-resetting");
+    };
+
+    const advanceNotification = () => {
+      if (reducedMotion.matches) return;
+
+      if (activeNotification < notifications.length - 1) {
+        contextDemo?.classList.add("is-switching-scenario");
+        replayTimer = window.setTimeout(() => {
+          showNotification(activeNotification + 1);
+          contextDemo?.classList.remove("is-switching-scenario");
+          replayTimer = window.setTimeout(advanceNotification, readingTime + layoutTransitionTime);
+        }, 360);
+        return;
+      }
+
+      replayDemo();
+    };
+
+    notificationStage?.addEventListener("animationend", (event) => {
+      if (event.animationName !== "notification-in" || reducedMotion.matches) return;
+      window.clearTimeout(replayTimer);
+      replayTimer = window.setTimeout(advanceNotification, readingTime);
+    });
+
+    reducedMotion.addEventListener("change", (event) => {
+      window.clearTimeout(replayTimer);
+      contextDemo?.classList.remove("is-switching-scenario");
+      contextDemo?.classList.remove("is-paused");
+      document.body.classList.remove("is-motion-paused");
+      motionToggle?.setAttribute("aria-pressed", "false");
+      motionToggle?.setAttribute("aria-label", motionToggle.dataset.pause ?? "");
+      motionToggle?.setAttribute("title", motionToggle.dataset.pause ?? "");
+      const icon = motionToggle?.querySelector("span");
+      if (icon) icon.textContent = "Ⅱ";
+      showNotification(0);
+      if (!event.matches) replayDemo();
+    });
+
+    motionToggle?.addEventListener("click", () => {
+      const isPaused = contextDemo?.classList.toggle("is-paused") ?? false;
+      document.body.classList.toggle("is-motion-paused", isPaused);
+      window.clearTimeout(replayTimer);
+      if (isPaused) contextDemo?.classList.remove("is-switching-scenario");
+      motionToggle.setAttribute("aria-pressed", String(isPaused));
+      motionToggle.setAttribute("aria-label", isPaused ? motionToggle.dataset.resume ?? "" : motionToggle.dataset.pause ?? "");
+      motionToggle.setAttribute("title", isPaused ? motionToggle.dataset.resume ?? "" : motionToggle.dataset.pause ?? "");
+      const icon = motionToggle.querySelector("span");
+      if (icon) icon.textContent = isPaused ? "▶" : "Ⅱ";
+      if (!isPaused && !reducedMotion.matches) replayTimer = window.setTimeout(advanceNotification, readingTime);
+    });
+
+    const form = document.querySelector<HTMLFormElement>("[data-waitlist-form]");
+    const status = document.querySelector<HTMLElement>("[data-form-status]");
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!status) return;
+
+      const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+      const submitButton = form.querySelector<HTMLButtonElement>("button[type='submit']");
+
+      if (!emailInput.validity.valid) {
+        status.textContent = form.dataset.invalidEmail ?? "";
+        status.dataset.state = "error";
+        emailInput.setAttribute("aria-invalid", "true");
+        emailInput.focus();
+        return;
+      }
+
+      emailInput.removeAttribute("aria-invalid");
+
+      const turnstileInput = form.querySelector<HTMLInputElement>("[name='cf-turnstile-response']");
+      submitButton?.setAttribute("disabled", "");
+      status.textContent = form.dataset.joining ?? "";
+      status.dataset.state = "loading";
+
+      try {
+        const response = await fetch("/api/waitlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: emailInput.value,
+            turnstileToken: turnstileInput?.value ?? "",
+          }),
+        });
+        const result = await response.json() as { code?: string };
+        const messageKey = result.code === "invalid_email"
+          ? "invalidEmail"
+          : result.code === "duplicate" || result.code === "security" || result.code === "unavailable"
+            ? result.code
+          : response.ok ? "subscribed" : "error";
+        const message = form.dataset[messageKey] ?? form.dataset.error ?? "";
+
+        if (!response.ok) {
+          status.textContent = message;
+          status.dataset.state = "error";
+          if (messageKey === "invalidEmail") {
+            emailInput.setAttribute("aria-invalid", "true");
+            emailInput.focus();
+          }
+          return;
+        }
+
+        form.reset();
+        status.textContent = message;
+        status.dataset.state = "success";
+      } catch {
+        status.textContent = form.dataset.error ?? "";
+        status.dataset.state = "error";
+      } finally {
+        const turnstile = (window as Window & { turnstile?: { reset: () => void } }).turnstile;
+        turnstile?.reset();
+        submitButton?.removeAttribute("disabled");
+      }
+    });
+  </script>
+</SiteLayout>

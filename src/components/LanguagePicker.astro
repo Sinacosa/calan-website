@@ -1,0 +1,34 @@
+---
+import { getLocalizedPath, localeConfig, locales, type Locale, type LocalizedPage } from "../i18n/config";
+import { translations } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  page?: LocalizedPage;
+}
+
+const { locale, page = "" } = Astro.props;
+const label = translations[locale].common.languageLabel;
+const accessibleLabel = `${label}: ${localeConfig[locale].label}`;
+---
+
+<details class="language-picker">
+  <summary aria-label={accessibleLabel} title={accessibleLabel}>
+    <span>{localeConfig[locale].shortLabel}</span>
+    <i aria-hidden="true"></i>
+  </summary>
+  <nav class="language-menu" aria-label={label}>
+    {locales.map((availableLocale) => (
+      <a
+        data-locale={availableLocale}
+        href={getLocalizedPath(availableLocale, page)}
+        lang={localeConfig[availableLocale].htmlLang}
+        dir={localeConfig[availableLocale].dir}
+        hreflang={localeConfig[availableLocale].htmlLang}
+        aria-current={availableLocale === locale ? "page" : undefined}
+      >
+        {localeConfig[availableLocale].label}
+      </a>
+    ))}
+  </nav>
+</details>

@@ -13,7 +13,10 @@ configuration.
 
 ## Project Structure
 
-- `src/pages/index.astro`: landing page structure, copy, and lightweight client behavior
+- `src/components/LandingPage.astro`: shared landing page structure and lightweight client behavior
+- `src/components/LegalPage.astro`: shared privacy and terms page structure
+- `src/i18n/`: locale configuration, copy types, and complete translations
+- `src/pages/`: English and locale-prefixed static route entry points
 - `src/styles/global.css`: visual tokens, layout, responsive behavior, and motion
 - `src/layouts/SiteLayout.astro`: shared document metadata and page shell
 - `functions/api/waitlist.ts`: Cloudflare Pages waitlist endpoint

@@ -1,0 +1,46 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import LanguagePicker from "./LanguagePicker.astro";
+import { translations } from "../i18n";
+import { getLocalizedPath, type Locale } from "../i18n/config";
+
+interface Props {
+  locale: Locale;
+  page: "privacy" | "terms";
+}
+
+const { locale, page } = Astro.props;
+const t = translations[locale];
+const content = t[page];
+---
+
+<SiteLayout
+  title={content.title}
+  description={content.description}
+  socialImageAlt={t.meta.socialImageAlt}
+  siteDescription={t.meta.applicationDescription}
+  pageClass="legal-page"
+  pagePath={page}
+  {locale}
+>
+  <a class="skip-link" href="#main-content">{t.common.skipToContent}</a>
+  <header class="legal-header shell">
+    <a class="wordmark" href={getLocalizedPath(locale)}>Calan</a>
+    <div class="legal-header-actions">
+      <LanguagePicker {locale} {page} />
+      <a href={getLocalizedPath(locale)}>{t.common.backHome}</a>
+    </div>
+  </header>
+  <main id="main-content" class="shell">
+    <h1>{content.heading}</h1>
+    <article class="legal-content">
+      <p>{content.lastUpdated}</p>
+      {content.sections.map((section) => (
+        <>
+          <h2>{section.title}</h2>
+          <p>{section.body}</p>
+        </>
+      ))}
+    </article>
+  </main>
+</SiteLayout>

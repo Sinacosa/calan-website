@@ -2,7 +2,7 @@
 
 This document records the approved visual and editorial direction for the Calan marketing website.
 Future changes should extend this system rather than reinterpret it. The current implementation in
-`src/pages/index.astro` and `src/styles/global.css` is the reference expression of this direction.
+`src/components/LandingPage.astro` and `src/styles/global.css` is the reference expression of this direction.
 
 ## Brand Foundation
 
@@ -145,6 +145,7 @@ Motion should communicate timing and convergence.
   layout transition finishes before advancing.
   Restart the full filtering sequence only after the last example.
 - Keep interactions responsive even when ambient animation is slow.
+- Keep a compact pause/resume control with the hero demonstration so users can stop automatic updates.
 - Honor `prefers-reduced-motion` with a complete static experience.
 - Content must remain understandable when JavaScript is unavailable.
 
@@ -162,6 +163,20 @@ The approved voice is calm and precise.
 
 Examples should show Calan anticipating a need: leaving on time, adapting to traffic or weather,
 noticing a relevant reply, or adjusting to a changed plan.
+
+## Localization
+
+English remains the unprefixed default at `/`. French, Spanish, German, Simplified Chinese, Japanese,
+Arabic, and Italian use locale-prefixed routes. The language menu must link directly to every equivalent
+page; do not automatically redirect visitors based on browser language.
+
+- Translate every visible string, accessibility label, form state, metadata field, and demonstration label.
+- Keep signal labels and notifications concise enough to preserve the visual hierarchy.
+- Preserve the calm editorial meaning rather than translating idioms word for word.
+- Use proper `lang`, canonical, and reciprocal `hreflang` metadata on every indexable page.
+- Arabic uses a right-to-left document direction. Isolate mixed-direction times, counters, product names,
+  and technical terms so they remain legible.
+- Localized legal copy should receive professional legal review before a public product launch.
 
 ## Accessibility
 

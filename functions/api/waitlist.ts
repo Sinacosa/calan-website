@@ -15,14 +15,15 @@ interface TurnstileResponse {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function json(message: string, status: number): Response {
+function json(code: string, message: string, status: number): Response {
   return Response.json(
-    { message },
+    { code, message },
     {
       status,
       headers: {
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
+        "X-Robots-Tag": "noindex, nofollow",
       },
     },
   );
@@ -44,29 +45,37 @@ async function verifyTurnstile(token: string, secret: string, remoteIP: string |
 
 const handlePost: PagesFunction<Env> = async ({ request, env }) => {
   if (!env.WAITLIST_DB) {
-    return json("The waitlist is not configured yet. Please check back soon.", 503);
+    return json("unavailable", "The waitlist is not configured yet. Please check back soon.", 503);
   }
 
   let payload: WaitlistRequest;
 
   try {
-    payload = await request.json<WaitlistRequest>();
+    if (request.headers.get("Content-Type")?.includes("application/json")) {
+      payload = await request.json<WaitlistRequest>();
+    } else {
+      const form = await request.formData();
+      payload = {
+        email: form.get("email"),
+        turnstileToken: form.get("cf-turnstile-response"),
+      };
+    }
   } catch {
-    return json("Invalid request.", 400);
+    return json("error", "Invalid request.", 400);
   }
 
   if (typeof payload.email !== "string") {
-    return json("Enter a valid email address.", 400);
+    return json("invalid_email", "Enter a valid email address.", 400);
   }
 
   const email = payload.email.trim().toLowerCase();
   if (email.length > 254 || !EMAIL_PATTERN.test(email)) {
-    return json("Enter a valid email address.", 400);
+    return json("invalid_email", "Enter a valid email address.", 400);
   }
 
   if (env.TURNSTILE_SECRET_KEY) {
     const token = typeof payload.turnstileToken === "string" ? payload.turnstileToken : "";
-    if (!token) return json("Complete the security check and try again.", 400);
+    if (!token) return json("security", "Complete the security check and try again.", 400);
 
     try {
       const isHuman = await verifyTurnstile(
@@ -74,9 +83,9 @@ const handlePost: PagesFunction<Env> = async ({ request, env }) => {
         env.TURNSTILE_SECRET_KEY,
         request.headers.get("CF-Connecting-IP"),
       );
-      if (!isHuman) return json("The security check failed. Please try again.", 400);
+      if (!isHuman) return json("security", "The security check failed. Please try again.", 400);
     } catch {
-      return json("The security check is temporarily unavailable. Please try again.", 503);
+      return json("unavailable", "The security check is temporarily unavailable. Please try again.", 503);
     }
   }
 
@@ -86,16 +95,16 @@ const handlePost: PagesFunction<Env> = async ({ request, env }) => {
     ).bind(email).run();
 
     if (result.meta.changes === 0) {
-      return json("You're already on the list. We'll keep you posted.", 200);
+      return json("duplicate", "You're already on the list. We'll keep you posted.", 200);
     }
 
-    return json("You're on the list. We'll be in touch.", 201);
+    return json("subscribed", "You're on the list. We'll be in touch.", 201);
   } catch {
-    return json("We couldn't add you right now. Please try again.", 500);
+    return json("unavailable", "We couldn't add you right now. Please try again.", 500);
   }
 };
 
 export const onRequest: PagesFunction<Env> = async (context) => {
   if (context.request.method === "POST") return handlePost(context);
-  return json("Method not allowed.", 405);
+  return json("error", "Method not allowed.", 405);
 };

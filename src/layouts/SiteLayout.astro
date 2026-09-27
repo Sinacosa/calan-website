@@ -1,40 +1,120 @@
 ---
 import "../styles/global.css";
+import { getLocalizedPath, localeConfig, locales, type Locale, type LocalizedPage } from "../i18n/config";
 
 interface Props {
   title?: string;
   description?: string;
   pageClass?: string;
+  noindex?: boolean;
+  socialImage?: string;
+  socialImageAlt?: string;
+  structuredData?: Array<Record<string, unknown>>;
+  locale?: Locale;
+  pagePath?: LocalizedPage;
+  alternatePages?: boolean;
+  siteDescription?: string;
 }
 
 const {
-  title = "Calan | The right notification at the right time",
+  title = "Calan | Personal AI Assistant for Timely Notifications",
   description = "Calan is your personal AI assistant. It understands the context around your day and tells you what matters, before it becomes urgent.",
   pageClass = "",
+  noindex = false,
+  socialImage = "/og-image.png",
+  socialImageAlt = "Calan: The right notification at the right time.",
+  structuredData = [],
+  locale = "en",
+  pagePath = "",
+  alternatePages = true,
+  siteDescription = "A personal AI assistant that delivers the right notification at the right time.",
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteURL = Astro.site ?? new URL(Astro.url.origin);
+const pathname = Astro.url.pathname === "/" ? "/" : `${Astro.url.pathname.replace(/\/+$/, "")}/`;
+const canonicalURL = new URL(alternatePages ? getLocalizedPath(locale, pagePath) : pathname, siteURL);
+const socialImageURL = new URL(socialImage, siteURL);
+const websiteURL = new URL(getLocalizedPath(locale), siteURL);
+const websiteId = `${websiteURL.href}#website`;
+const webpageId = `${canonicalURL.href}#webpage`;
+const language = localeConfig[locale];
+const robots = noindex
+  ? "noindex, nofollow"
+  : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: websiteURL.href,
+      name: "Calan",
+      description: siteDescription,
+      inLanguage: language.htmlLang,
+    },
+    {
+      "@type": "WebPage",
+      "@id": webpageId,
+      url: canonicalURL.href,
+      name: title,
+      description,
+      inLanguage: language.htmlLang,
+      isPartOf: { "@id": websiteId },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: socialImageURL.href,
+        width: 1200,
+        height: 630,
+      },
+    },
+    ...structuredData,
+  ],
+};
+const serializedSchema = JSON.stringify(schema).replace(/</g, "\\u003c");
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={language.htmlLang} dir={language.dir}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="theme-color" content="#f2f0e9" />
+    <meta name="color-scheme" content="light" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {alternatePages && locales.map((alternateLocale) => (
+      <link
+        rel="alternate"
+        hreflang={localeConfig[alternateLocale].htmlLang}
+        href={new URL(getLocalizedPath(alternateLocale, pagePath), siteURL)}
+      />
+    ))}
+    {alternatePages && <link rel="alternate" hreflang="x-default" href={new URL(getLocalizedPath("en", pagePath), siteURL)} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Calan" />
+    <meta property="og:locale" content={language.ogLocale} />
+    {alternatePages && locales.filter((alternateLocale) => alternateLocale !== locale).map((alternateLocale) => (
+      <meta property="og:locale:alternate" content={localeConfig[alternateLocale].ogLocale} />
+    ))}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={new URL("/og-image.png", Astro.site)} />
+    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image:secure_url" content={socialImageURL} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
+    <meta name="twitter:image" content={socialImageURL} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
+    {!noindex && <script type="application/ld+json" set:html={serializedSchema} />}
     <title>{title}</title>
     <slot name="head" />
   </head>

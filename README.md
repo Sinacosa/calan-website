@@ -72,3 +72,45 @@ Create the API token from the Cloudflare dashboard's **API Tokens** page using a
 The private `TURNSTILE_SECRET_KEY` remains stored in the Cloudflare Pages project. Do not add it to
 GitHub. The workflow deploys to the existing `calan-website` project and uses the D1 binding from
 `wrangler.jsonc`.
+
+## Search visibility
+
+The site generates canonical URLs, Open Graph and Twitter metadata, Schema.org structured data,
+`robots.txt`, and an XML sitemap. The API and custom 404 response are excluded from indexing.
+
+Complete these production steps after deploying:
+
+1. Configure Cloudflare to redirect HTTP and any `www` hostname to `https://calan.app` in one hop.
+2. Add `calan.app` as a Domain property in Google Search Console and verify it with the provided DNS
+   record. Submit `https://calan.app/sitemap-index.xml` from the Sitemaps screen.
+3. Import the verified property into Bing Webmaster Tools and submit the same sitemap.
+4. Inspect the homepage in Google Search Console and validate its structured data with Schema.org's
+   validator after every material metadata change.
+5. Check the production social preview with LinkedIn Post Inspector and Facebook Sharing Debugger when
+   the social image changes.
+6. Monitor indexing, Core Web Vitals, and crawl errors in Search Console after releases. Do not request
+   indexing for preview deployments or unpublished pages.
+
+Before launch, confirm that these production URLs return successfully and contain the canonical origin:
+
+- `https://calan.app/`
+- `https://calan.app/robots.txt`
+- `https://calan.app/sitemap-index.xml`
+- `https://calan.app/og-image.png`
+
+## Localization
+
+English is served from `/`. Localized versions are available under `/fr/`, `/es/`, `/de/`, `/zh/`,
+`/ja/`, `/ar/`, and `/it/`, with matching `/privacy/` and `/terms/` pages beneath each prefix. Arabic
+uses a right-to-left document direction. Visitors choose their language explicitly; the site does not
+redirect based on browser settings.
+
+Locale configuration lives in `src/i18n/config.ts`. All user-facing copy lives in typed files under
+`src/i18n/locales/`; adding a required field to `SiteCopy` makes incomplete locale files fail type checking.
+The shared landing and legal templates live in `src/components/`.
+
+Every localized page emits its own title, description, canonical URL, Open Graph locale, structured data,
+and reciprocal `hreflang` links. The sitemap integration publishes the same language relationships.
+
+The initial translations are editorial drafts. Have a native speaker review marketing copy and obtain
+professional legal review of every translated privacy policy and terms page before public launch.

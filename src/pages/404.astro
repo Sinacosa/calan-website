@@ -1,0 +1,104 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import LanguagePicker from "../components/LanguagePicker.astro";
+import { translations } from "../i18n";
+import { getLocalizedPath, localeConfig, locales } from "../i18n/config";
+
+const t = translations.en;
+const localized404 = Object.fromEntries(locales.map((locale) => [
+  locale,
+  {
+    htmlLang: localeConfig[locale].htmlLang,
+    dir: localeConfig[locale].dir,
+    ogLocale: localeConfig[locale].ogLocale,
+    localeLabel: localeConfig[locale].label,
+    shortLabel: localeConfig[locale].shortLabel,
+    languageLabel: translations[locale].common.languageLabel,
+    skipToContent: translations[locale].common.skipToContent,
+    socialImageAlt: translations[locale].meta.socialImageAlt,
+    backHome: translations[locale].common.backHome,
+    homePath: getLocalizedPath(locale),
+    ...translations[locale].notFound,
+  },
+]));
+---
+
+<SiteLayout
+  title={t.notFound.title}
+  description={t.notFound.description}
+  pageClass="legal-page"
+  noindex
+  alternatePages={false}
+>
+  <a class="skip-link" data-404-skip href="#main-content">{t.common.skipToContent}</a>
+  <header class="legal-header shell">
+    <a class="wordmark" data-404-home href="/">Calan</a>
+    <div class="legal-header-actions">
+      <LanguagePicker locale="en" />
+      <a data-404-back href="/">{t.common.backHome}</a>
+    </div>
+  </header>
+  <main id="main-content" class="shell" data-404-translations={JSON.stringify(localized404)}>
+    <h1 data-404-heading>{t.notFound.heading}</h1>
+    <article class="legal-content">
+      <p data-404-copy>{t.notFound.copy}</p>
+      <p><a data-404-return href="/">{t.notFound.returnHome}</a></p>
+    </article>
+  </main>
+
+  <script>
+    const container = document.querySelector<HTMLElement>("[data-404-translations]");
+    const localized = JSON.parse(container?.dataset.translations ?? "{}") as Record<string, {
+      htmlLang: string;
+      dir: "ltr" | "rtl";
+      ogLocale: string;
+      localeLabel: string;
+      shortLabel: string;
+      languageLabel: string;
+      skipToContent: string;
+      socialImageAlt: string;
+      backHome: string;
+      homePath: string;
+      title: string;
+      description: string;
+      heading: string;
+      copy: string;
+      returnHome: string;
+    }>;
+    const requestedLocale = window.location.pathname.split("/")[1];
+    const locale = localized[requestedLocale] ? requestedLocale : "en";
+    const copy = localized[locale];
+
+    if (copy) {
+      document.documentElement.lang = copy.htmlLang;
+      document.documentElement.dir = copy.dir;
+      document.title = copy.title;
+      document.querySelector<HTMLMetaElement>('meta[name="description"]')?.setAttribute("content", copy.description);
+      document.querySelector<HTMLMetaElement>('meta[property="og:title"]')?.setAttribute("content", copy.title);
+      document.querySelector<HTMLMetaElement>('meta[property="og:description"]')?.setAttribute("content", copy.description);
+      document.querySelector<HTMLMetaElement>('meta[property="og:locale"]')?.setAttribute("content", copy.ogLocale);
+      document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]')?.setAttribute("content", copy.title);
+      document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]')?.setAttribute("content", copy.description);
+      document.querySelector<HTMLMetaElement>('meta[property="og:image:alt"]')?.setAttribute("content", copy.socialImageAlt);
+      document.querySelector<HTMLMetaElement>('meta[name="twitter:image:alt"]')?.setAttribute("content", copy.socialImageAlt);
+      document.querySelector<HTMLElement>("[data-404-heading]")?.replaceChildren(copy.heading);
+      document.querySelector<HTMLElement>("[data-404-copy]")?.replaceChildren(copy.copy);
+
+      const links = document.querySelectorAll<HTMLAnchorElement>("[data-404-home], [data-404-back], [data-404-return]");
+      links.forEach((link) => link.href = copy.homePath);
+      document.querySelector<HTMLElement>("[data-404-back]")?.replaceChildren(copy.backHome);
+      document.querySelector<HTMLElement>("[data-404-return]")?.replaceChildren(copy.returnHome);
+      document.querySelector<HTMLElement>("[data-404-skip]")?.replaceChildren(copy.skipToContent);
+
+      const summary = document.querySelector<HTMLElement>(".language-picker summary");
+      const languagePickerLabel = `${copy.languageLabel}: ${copy.localeLabel}`;
+      summary?.setAttribute("aria-label", languagePickerLabel);
+      summary?.setAttribute("title", languagePickerLabel);
+      summary?.querySelector("span")?.replaceChildren(copy.shortLabel);
+      document.querySelector<HTMLElement>(".language-menu")?.setAttribute("aria-label", copy.languageLabel);
+      document.querySelectorAll<HTMLAnchorElement>(".language-menu a").forEach((link) => {
+        link.removeAttribute("aria-current");
+      });
+    }
+  </script>
+</SiteLayout>
